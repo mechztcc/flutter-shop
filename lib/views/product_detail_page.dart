@@ -10,9 +10,7 @@ class ProductDetailPage extends StatelessWidget {
         ModalRoute.of(context)?.settings.arguments as Product;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          product.title,
-        ),
+        title: Text(product.title),
       ),
     );
   }
