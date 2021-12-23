@@ -7,7 +7,7 @@ import 'package:shop/views/product_detail_page.dart';
 class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(context);
+    final product = Provider.of<Product>(context, listen: true);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
