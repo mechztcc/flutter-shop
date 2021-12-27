@@ -32,7 +32,9 @@ class _OrderWidgetState extends State<OrderWidget> {
                   _expanded = !_expanded;
                 });
               },
-              icon: Icon(Icons.expand_more),
+              icon: Icon(
+                Icons.expand_more,
+              ),
             ),
           ),
           _expanded
