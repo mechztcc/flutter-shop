@@ -4,6 +4,7 @@ import 'package:shop/models/cart.dart';
 import 'package:shop/models/order_list.dart';
 import 'package:shop/utils/app_routes.dart';
 import 'package:shop/views/cart_page.dart';
+import 'package:shop/views/order_page.dart';
 import 'package:shop/views/product_detail_page.dart';
 import 'package:shop/views/products_overview_page.dart';
 
@@ -38,10 +39,12 @@ class MyApp extends StatelessWidget {
               .copyWith(secondary: Colors.deepOrange),
           fontFamily: 'Lato',
         ),
-        home: ProductsOverviewPage(),
+        // home: ProductsOverviewPage(),
         routes: {
+          AppRoutes.HOME: (ctx) => ProductsOverviewPage(),
           AppRoutes.PRODUCT_DETAIL: (ctx) => ProductDetailPage(),
           AppRoutes.CART: (ctx) => CartPage(),
+          AppRoutes.ORDERS: (ctx) => OrdersPage(),
         },
       ),
     );
