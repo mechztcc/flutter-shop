@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:shop/models/product.dart';
 import 'package:shop/utils/app_routes.dart';
 
 class ProductFormPage extends StatefulWidget {
@@ -17,8 +20,23 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
     final _imageUrlController = TextEditingController();
 
+    final _formKey = GlobalKey<FormState>();
+
+    final _formData = Map<String, Object>();
+
     void updateImage() {
       setState(() {});
+    }
+
+    void _submitForm() {
+      _formKey.currentState?.save();
+      final newProduct = Product(
+        id: Random().nextDouble().toString(),
+        name: _formData['name'].toString(),
+        description: _formData['description'].toString(),
+        price: double.parse(_formData['price'].toString()),
+        imageUrl: _formData['url'].toString(),
+      );
     }
 
     @override
@@ -39,10 +57,17 @@ class _ProductFormPageState extends State<ProductFormPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Formulario de Produto'),
+        actions: [
+          IconButton(
+            onPressed: _submitForm,
+            icon: Icon(Icons.send),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
         child: Form(
+          key: _formKey,
           child: ListView(
             children: [
               TextFormField(
@@ -53,6 +78,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_priceFocus);
                 },
+                onSaved: (name) => _formData['name'] = name ?? '',
               ),
               TextFormField(
                 decoration: InputDecoration(
@@ -64,6 +90,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_descriptionFocus);
                 },
+                onSaved: (preco) =>
+                    _formData['preco'] = double.parse(preco ?? '0'),
               ),
               TextFormField(
                 decoration: InputDecoration(
@@ -71,6 +99,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 ),
                 focusNode: _descriptionFocus,
                 keyboardType: TextInputType.multiline,
+                onSaved: (description) =>
+                    _formData['description'] = description ?? '',
                 maxLines: 3,
               ),
               Row(
@@ -85,6 +115,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       keyboardType: TextInputType.url,
                       textInputAction: TextInputAction.done,
                       controller: _imageUrlController,
+                      onFieldSubmitted: (_) => _submitForm(),
+                      onSaved: (url) => _formData['url'] = url ?? '',
                     ),
                   ),
                   Container(
