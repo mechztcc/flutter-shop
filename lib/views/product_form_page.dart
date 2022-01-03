@@ -53,7 +53,6 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 decoration: InputDecoration(
                   labelText: 'Descrição',
                 ),
-                textInputAction: TextInputAction.next,
                 focusNode: _descriptionFocus,
                 keyboardType: TextInputType.multiline,
                 maxLines: 3,
