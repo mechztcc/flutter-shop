@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop/models/product.dart';
+import 'package:shop/models/product_list.dart';
 import 'package:shop/utils/app_routes.dart';
 
 class ProductFormPage extends StatefulWidget {
@@ -44,6 +46,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
         price: double.parse(_formData['price'].toString()),
         imageUrl: _formData['url'].toString(),
       );
+
+      Provider.of<ProductList>(context, listen: false).addProduct(newProduct);
+      Navigator.of(context).pop();
     }
 
     bool isValidImageUrl(String url) {
