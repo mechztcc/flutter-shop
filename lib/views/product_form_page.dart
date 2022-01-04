@@ -30,6 +30,13 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
     void _submitForm() {
       _formKey.currentState?.save();
+
+      final isValid = _formKey.currentState?.validate() ?? false;
+
+      if (!isValid) {
+        return;
+      }
+
       final newProduct = Product(
         id: Random().nextDouble().toString(),
         name: _formData['name'].toString(),
@@ -37,6 +44,14 @@ class _ProductFormPageState extends State<ProductFormPage> {
         price: double.parse(_formData['price'].toString()),
         imageUrl: _formData['url'].toString(),
       );
+    }
+
+    bool isValidImageUrl(String url) {
+      bool isValidUrl = Uri.tryParse(url)?.hasAbsolutePath ?? false;
+      bool endsWithFile = url.toLowerCase().endsWith('.png') ||
+          url.toLowerCase().endsWith('jpg');
+
+      return isValidUrl && endsWithFile;
     }
 
     @override
@@ -79,6 +94,17 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   FocusScope.of(context).requestFocus(_priceFocus);
                 },
                 onSaved: (name) => _formData['name'] = name ?? '',
+                validator: (_nome) {
+                  final nome = _nome ?? '';
+
+                  if (nome.trim().isEmpty) {
+                    return 'Nome é Obrigatório';
+                  }
+
+                  if (nome.trim().length < 3) {
+                    return 'Nome precisa ter no mínimo 3 letras';
+                  }
+                },
               ),
               TextFormField(
                 decoration: InputDecoration(
@@ -92,6 +118,16 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 },
                 onSaved: (preco) =>
                     _formData['preco'] = double.parse(preco ?? '0'),
+                validator: (_price) {
+                  final priceString = _price ?? '';
+                  final price = double.tryParse(priceString) ?? -1;
+
+                  if (price <= 0) {
+                    return 'Informe um preço válido';
+                  }
+
+                  return null;
+                },
               ),
               TextFormField(
                 decoration: InputDecoration(
@@ -102,6 +138,17 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 onSaved: (description) =>
                     _formData['description'] = description ?? '',
                 maxLines: 3,
+                validator: (_descritpion) {
+                  final description = _descritpion ?? '';
+
+                  if (description.trim().isEmpty) {
+                    return 'Descrição é Obrigatório';
+                  }
+
+                  if (description.trim().length < 10) {
+                    return 'Descrição precisa ter no mínimo 10 letras';
+                  }
+                },
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -117,6 +164,12 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       controller: _imageUrlController,
                       onFieldSubmitted: (_) => _submitForm(),
                       onSaved: (url) => _formData['url'] = url ?? '',
+                      validator: (_url) {
+                        final imageUrl = _url ?? '';
+                        if (!isValidImageUrl(imageUrl)) {
+                          return 'Informe uma URL válida.';
+                        }
+                      },
                     ),
                   ),
                   Container(
